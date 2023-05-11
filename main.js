@@ -1,63 +1,58 @@
-<script>
-  // JSON dosyasındaki verileri çekmek için XMLHttpRequest kullanıyoruz
-  var request = new XMLHttpRequest();
-  request.open('GET', 'quotes.json');
-  request.responseType = 'json';
-  request.send();
 
-  // JSON dosyasındaki veriler yüklendiğinde çalışacak olan fonksiyon
-  request.onload = function() {
-    var quotes = request.response;
-    var numQuotes = Object.keys(quotes).length;
+        // JSON dosyasından alıntıları okuma
+        fetch('quotes.json')
+            .then(response => response.json())
+            .then(data => {
+                const quotes = data.quotes;
 
-    // Rastgele bir id seçmek için bir fonksiyon
-    function randomQuoteId() {
-      return Math.floor(Math.random() * numQuotes) + 1;
-    }
+                // Alıntıları gösterme fonksiyonu
+                function showQuotes() {
+                    const count = parseInt(document.getElementById('quoteCount').value);
+                    const quoteContainer = document.getElementById('quotes');
+                    quoteContainer.innerHTML = '';
 
-    // Sayfa yenilendiğinde rastgele bir quote göstermek için gerekli kod
-    var quoteId = randomQuoteId();
-    var quote = quotes[quoteId]['quote'];
-    var author = quotes[quoteId]['author'];
+                    const uniqueQuotes = getRandomUniqueQuotes(count, quotes);
 
-    var quoteDisplay = document.getElementById('quote');
-    quoteDisplay.textContent = quote;
+                    uniqueQuotes.forEach(quote => {
+                        const quoteElement = document.createElement('div');
+                        quoteElement.classList.add('quote');
 
-    var authorDisplay = document.getElementById('author');
-    authorDisplay.textContent = 'Author: ' + author;
+                        const quoteTextElement = document.createElement('p');
+                        quoteTextElement.textContent = quote.quote;
+                        quoteElement.appendChild(quoteTextElement);
 
-    // New Quote butonuna tıklanınca rastgele bir quote göstermek için gerekli kod
-    var newQuoteBtn = document.getElementById('new-quote-btn');
-    newQuoteBtn.addEventListener('click', function() {
-      var newQuoteId = randomQuoteId();
-      while (newQuoteId == quoteId) {
-        newQuoteId = randomQuoteId();
-      }
-      quoteId = newQuoteId;
-      quote = quotes[quoteId]['quote'];
-      author = quotes[quoteId]['author'];
-      quoteDisplay.textContent = quote;
-      authorDisplay.textContent = 'Author: ' + author;
-    });
+                        const authorElement = document.createElement('p');
+                        authorElement.id= "authorElement";
+                        authorElement.textContent = `- ${quote.author}`;
+                        quoteElement.appendChild(authorElement);
 
-    // Submit butonuna tıklanınca girilen sayı kadar quote göstermek için gerekli kod
-    var submitBtn = document.getElementById('submit-btn');
-    submitBtn.addEventListener('click', function() {
-      var quoteNumber = document.getElementById('quote-number-input').value;
-      if (quoteNumber > numQuotes) {
-        quoteNumber = numQuotes;
-      }
-      for (var i = 0; i < quoteNumber; i++) {
-        var newQuoteId = randomQuoteId();
-        while (newQuoteId == quoteId) {
-          newQuoteId = randomQuoteId();
-        }
-        quoteId = newQuoteId;
-        quote = quotes[quoteId]['quote'];
-        author = quotes[quoteId]['author'];
-        var newQuoteDisplay = document.createElement('div');
-        newQuoteDisplay.innerHTML = '<h2>Quote:</h2><p>' + quote + '</p><p>'Author: ' + author + '</p>';
-        document.body.appendChild(newQuoteDisplay);
-      }
-    });
-  };
+                        quoteContainer.appendChild(quoteElement);
+                    });
+                }
+
+                // Belirtilen sayıda farklı alıntıları rastgele seçme fonksiyonu
+                function getRandomUniqueQuotes(count, quotes) {
+                    const uniqueQuotes = [];
+                    const quoteIndices = new Set();
+
+                    while (quoteIndices.size < count) {
+                        const randomIndex = Math.floor(Math.random() * quotes.length);
+
+                        if (!quoteIndices.has(randomIndex)) {
+                            quoteIndices.add(randomIndex);
+                            uniqueQuotes.push(quotes[randomIndex]);
+                        }
+                    }
+
+                    return uniqueQuotes;
+                }
+
+                // Sayfa yüklendiğinde rastgele bir alıntı göster
+                showQuotes();
+
+                // Butona tıklandığında alıntıları göster
+                document.getElementById('nextButton').addEventListener('click', showQuotes);
+            })
+            .catch(error => {
+                console.error('Alıntılar yüklenirken bir hata oluştu:', error);
+            });
