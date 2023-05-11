@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Alıntı Ekleme Uygulaması</title>
+</head>
+<body>
+    <h1>Alıntı Ekleme Uygulaması</h1>
+
+    <form id="addQuoteForm">
+        <label for="quote">Alıntı Metni:</label>
+        <textarea id="quote" name="quote"></textarea>
+
+        <label for="author">Alıntı Yazarı:</label>
+        <input type="text" id="author" name="author">
+
+        <button type="submit">Alıntı Ekle</button>
+    </form>
+
+    <script>
+        // Form submit edildiğinde çalışacak fonksiyon
+        function addQuote(event) {
+            event.preventDefault(); // Sayfanın yenilenmesini engelle
+
+            const quoteText = document.getElementById('quote').value.trim();
+            const authorName = document.getElementById('author').value.trim();
+
+            // Gerekli alanları doldurup doldurmadığımızı kontrol et
+            if (!quoteText || !authorName) {
+                alert('Lütfen alıntı metnini ve yazar adını girin.');
+                return;
+            }
+
+            // Yeni alıntı verisini oluştur
+            const newQuote = {
+                quote: quoteText,
+                author: authorName
+            };
+
+            // JSON dosyasını GET isteğiyle al
+            fetch('quotes.json')
+                .then(response => response.json())
+                .then(data => {
+                    const quotes = data.quotes || [];
+
+                    // Otomatik id atama
+                    const maxId = quotes.reduce((max, quote) => {
+                        return quote.id > max ? quote.id : max;
+                    }, 0);
+                    newQuote.id = maxId + 1;
+
+                    // Yeni alıntıyı ekleyerek JSON dosyasını güncelle
+                    quotes.push(newQuote);
+
+                    // JSON dosyasını PUT isteğiyle güncelle
+                    return fetch('quotes.json', {
+                        method: 'PUT',
+                        body: JSON.stringify({ quotes }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Alıntı başarıyla eklendi!');
+                        document.getElementById('addQuoteForm').reset(); // Formu sıfırla
+                    } else {
+                        throw new Error('JSON dosyası güncellenirken bir hata oluştu.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Alıntı ekleme işlemi başarısız oldu:', error);
+                    alert('Alıntı ekleme işlemi başarısız oldu. Lütfen tekrar deneyin.');
+                });
+        }
+
+        // Form submit edildiğinde addQuote fonksiyonunu çağır
+        document.getElementById('addQuoteForm').addEventListener('submit', addQuote);
+    </script>
+</body>
+</html>

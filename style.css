@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body h1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.quote{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+#authorElement{
+    font-size: large;
+    font-weight: 600;
+}
+
+#quotes{
+    display: grid;
+    justify-items: center;
+    align-content: center;
+}
+
+.content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

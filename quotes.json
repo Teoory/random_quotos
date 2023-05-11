@@ -1,0 +1,50 @@
+{
+    "quotes": [
+      {
+        "id": 1,
+        "quote": "All’s well that ends better.",
+        "author": "Hamfast Gamgee"
+      },
+      {
+        "id": 2,
+        "quote": "Let him not vow to walk in the dark, who has not seen the nightfall.",
+        "author": "Elrond"
+      },
+      {
+        "id": 3,
+        "quote": "It’s the job that’s never started as takes longest to finish.",
+        "author": "Sam Gamgee"
+      },
+      {
+        "id": 4,
+        "quote": "I'm your Huckleberry.",
+        "author": "Tombstone"
+      },
+      {
+        "id": 5,
+        "quote": "You see, in their last moments people show you who they really are.",
+        "author": "The Dark Knight"
+      },
+      {
+        "id": 6,
+        "quote": "I just hope my death makes more cents than my life.",
+        "author": "Joker"
+      },
+      {
+        "id": 7,
+        "quote": "Run, Forrest, run!",
+        "author": "Forrest Gump"
+      },
+      {
+        "id": 8,
+        "quote": "What do you want most in the world?",
+        "author": "Anna"
+      },
+      {
+        "id": 9,
+        "quote": "Secrecy is security and security is victory.",
+        "author": "Snowden"
+      }
+    ]
+  }
+  
